@@ -44,7 +44,7 @@ const StudentProfile = () => {
     console.log(formData);
     try {
       setLoading(true);
-      const response = await fetch("/api/v1/student/updateProfile", {
+      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/student/updateProfile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
