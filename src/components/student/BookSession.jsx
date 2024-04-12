@@ -22,7 +22,7 @@ const BookSession = () => {
     console.log(formData);
     try {
       setLoading(true);
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/student/bookSession",{
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/student/bookSession",{
         method : "POST",
         headers : {
           "Content-Type" : "application/json",

@@ -12,7 +12,7 @@ const PendingRequests = () => {
   const handleCancelRequest = async (sessionId) => {
     console.log("Cancel Request");
     try {
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/student/cancelSession", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/student/cancelSession", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

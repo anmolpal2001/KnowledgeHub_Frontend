@@ -26,7 +26,7 @@ const SessionContextProvider = ({ children }) => {
   const fetchTeachers = async () => { 
     try {
       setLoading(true)
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/student/getAllTeachers", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/student/getAllTeachers", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const SessionContextProvider = ({ children }) => {
   const fetchPendingRequests = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/student/sessionRequestList",{
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/student/sessionRequestList",{
         method : "GET",
         headers : {
           "Content-Type" : "application/json",
@@ -76,7 +76,7 @@ const SessionContextProvider = ({ children }) => {
   const fetchBookedSessions = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/student/getbookedSessions", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/student/getbookedSessions", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const SessionContextProvider = ({ children }) => {
   const fetchRejectedSessions = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/student/rejectedRequestsList", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/student/rejectedRequestsList", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +126,7 @@ const SessionContextProvider = ({ children }) => {
   const fetchBookingRequests = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/teacher/getAllBookingRequests", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/teacher/getAllBookingRequests", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +152,7 @@ const SessionContextProvider = ({ children }) => {
   const fetchCancelledSessions = async () => {
     try {
       setLoading(true);
-        const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/teacher/cancelledRequests", {
+        const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/teacher/cancelledRequests", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -176,7 +176,7 @@ const SessionContextProvider = ({ children }) => {
 const fetchAcceptedSessions = async () => {
   try {
     setLoading(true);
-    const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/teacher/getTeacherBookedSessions", {
+    const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/teacher/getTeacherBookedSessions", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

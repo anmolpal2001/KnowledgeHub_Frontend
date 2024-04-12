@@ -17,7 +17,7 @@ const StudentCard = ({ request }) => {
     console.log("Approve Request");
     try {
       setApproveLoading(true);
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/teacher/approveSession", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/teacher/approveSession", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const StudentCard = ({ request }) => {
     console.log("Reject Request");
     try {
       setRejectLoading(true);
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/teacher/rejectSession", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/teacher/rejectSession", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

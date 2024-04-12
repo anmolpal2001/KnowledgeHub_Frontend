@@ -28,7 +28,7 @@ const SignIn = () => {
     e.preventDefault();
     try {
       dispatch(loginStart());
-      const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/auth/login", {
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

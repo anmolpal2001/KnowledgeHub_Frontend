@@ -23,7 +23,7 @@ const SignUp = () => {
     // console.log(formData);
     try{
         setLoading(true);
-        const response = await fetch("https://knowledge-hub-aw7r.onrender.com/api/v1/auth/register",{
+        const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/auth/register",{
             method : "POST",
             headers : {
                 "Content-Type" : "application/json"
