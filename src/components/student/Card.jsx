@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setTeacher } from "../../redux/student/studentSlice";
+import SchoolIcon from '@mui/icons-material/School';
 
 const Card = ({teacher}) => {
   console.log(teacher);
@@ -9,7 +10,7 @@ const Card = ({teacher}) => {
   const navigate = useNavigate();
   const handleBookSession = () => {
     dispatch(setTeacher({teacher : teacher}));
-    navigate("/student/book-session");
+    navigate("/book-session");
   }
 
   return (
@@ -33,7 +34,7 @@ const Card = ({teacher}) => {
             </div>
             <div className="flex items-center">
               <span className="text-[17px] font-medium text-white">
-                Education Qualification:
+                <SchoolIcon/>
               </span>
               <span className="ml-2 text-[17px] font-semibold text-[#6fffb7ee]">{teacher.educationQualification}</span>
             </div>

@@ -17,7 +17,7 @@ const StudentCard = ({ request }) => {
     console.log("Approve Request");
     try {
       setApproveLoading(true);
-      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/teacher/approveSession", {
+      const response = await fetch("http://localhost:3000/api/v1/teacher/approveSession", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

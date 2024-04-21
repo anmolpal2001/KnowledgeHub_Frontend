@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/auth/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../../assets/knowhub.png";
 import OfflinePinIcon from "@mui/icons-material/OfflinePin";
@@ -11,23 +11,42 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Outlet } from "react-router-dom";
+import UserNavigationPanel from "../UserNavigation";
+import AuthLayout from "../AuthLayout";
 
 const StudentLayout = ({ children }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = async () => {
-    dispatch(logout());
-    navigate("/");
+    try{
+      const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/auth/logout");
+      const data = await response.json();
+      if(data.success){
+        dispatch(logout());
+        navigate("/signin");
+        console.log(data);
+      }
+    }catch(error){
+      console.log(error);
+    }
   };
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenIcon, setIsOpenIcon] = useState(false);
-  const [teachers, setTeachers] = useState([]);
+  const [userNavPanel, setUserNavPanel] = useState(false);
   const toggleIcon = () => {
     setIsOpenIcon(!isOpenIcon);
   };
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+  const handleUserNavPanel = () => {
+    setUserNavPanel((currVal) => !currVal);
+  };
+  const handleBlur = () => {
+    setTimeout(() => {
+      setUserNavPanel(false);
+    },200);
   };
   return (
     <>
@@ -45,67 +64,21 @@ const StudentLayout = ({ children }) => {
                   <span className="sr-only">Open sidebar</span>
                   <MenuIcon />
                 </button>
-                <a href="#" className="flex ms-2 md:me-24">
+                <Link to="/" className="flex ms-2 md:me-24">
                   <img src={logo} className="h-8 me-3" alt="FlowBite Logo" />
                   <span className="self-center text-xl font-bold sm:text-2xl whitespace-nowrap dark:text-white">
                     Knowledge <span className="text-yellow-400">Hub</span>
                   </span>
-                </a>
+                </Link>
               </div>
               <div className="flex items-center">
                 <div className="flex items-center ms-3 relative">
-                  <button
-                    onClick={toggleIcon}
-                    type="button"
-                    className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                    aria-expanded={isOpenIcon ? "true" : "false"}
-                  >
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="w-8 h-8 rounded-full"
-                      src={currentUser.profilePic}
-                      alt="user photo"
-                    />
-                  </button>
-                  {isOpenIcon && (
-                    <div className="z-50 absolute mt-48 -ml-36 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
-                      <div className="px-4 py-3" role="none">
-                        <p
-                          className="text-sm text-gray-900 dark:text-white"
-                          role="none"
-                        >
-                          {currentUser.fullname}
-                        </p>
-                        <p
-                          className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                          role="none"
-                        >
-                          {currentUser.email}
-                        </p>
-                      </div>
-                      <ul className="py-1" role="none">
-                        <Link
-                          to="/profile"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                          role="menuitem"
-                        >
-                          <li>
-                            <SettingsIcon /> Settings
-                          </li>
-                        </Link>
-                      
-                        <li>
-                          <button
-                            onClick={handleLogout}
-                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                            role="menuitem"
-                          >
-                            <LogoutIcon /> Sign out
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
+                <div className="relative" onClick={handleUserNavPanel} onBlur={handleBlur}>
+                    <button className="w-10 h-10">
+                        <img src={currentUser.profilePic} alt="" className="w-full h-full object-cover rounded-full"/>
+                    </button>
+                    {userNavPanel && <UserNavigationPanel handleLogout={handleLogout} />}
+                </div>
                 </div>
               </div>
             </div>
@@ -121,20 +94,30 @@ const StudentLayout = ({ children }) => {
         >
           <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul className="space-y-2 font-medium">
-              <Link
-                to="/student"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg dark:hover:bg-gray-700 group ${
+                    isActive ? "bg-blue-600 text-white hover:bg-blue-500" : "text-gray-900"
+                  }`
+                }
+                end
                 onClick={toggleSidebar}
               >
                 <li>
                   <DashboardIcon />
                   <span className="ms-3">Dashboard</span>
                 </li>
-              </Link>
+              </NavLink>
 
-              <Link
-                to="/student/booked-sessions"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              <NavLink
+                to="/booked-sessions"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg dark:hover:bg-gray-700 group ${
+                    isActive ? "bg-blue-600 text-white hover:bg-blue-500" : "text-gray-900"
+                  }`
+                }
+                end
                 onClick={toggleSidebar}
               >
                 <li>
@@ -143,13 +126,16 @@ const StudentLayout = ({ children }) => {
                     Booked Sessions
                   </span>
                 </li>
-              </Link>
+              </NavLink>
 
-              
-
-              <Link
-                to="/student/pending-requests"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              <NavLink
+                to="/pending-requests"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg dark:hover:bg-gray-700 group ${
+                    isActive ? "bg-blue-600 text-white hover:bg-blue-500" : "text-gray-900"
+                  }`
+                }
+                end
                 onClick={toggleSidebar}
               >
                 <li>
@@ -158,11 +144,16 @@ const StudentLayout = ({ children }) => {
                     Pending Requests
                   </span>
                 </li>
-              </Link>
+              </NavLink>
 
-            <Link
-                to="/student/rejected-sessions"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              <NavLink
+                to="/rejected-sessions"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg dark:hover:bg-gray-700 group ${
+                    isActive ? "bg-blue-600 text-white hover:bg-blue-500" : "text-gray-900"
+                  }`
+                }
+                end
                 onClick={toggleSidebar}
               >
                 <li>
@@ -171,7 +162,7 @@ const StudentLayout = ({ children }) => {
                     Rejected Slots
                   </span>
                 </li>
-              </Link>
+              </NavLink>
             </ul>
           </div>
         </aside>

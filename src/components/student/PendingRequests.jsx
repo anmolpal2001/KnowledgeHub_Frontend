@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { SessionContextApi } from "../../context/SessionContextProvider";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useSelector } from "react-redux";
+import StudentLayout from "./Layout";
 
 const PendingRequests = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);
@@ -29,7 +30,8 @@ const PendingRequests = () => {
     }
   };
   return (
-    <div className="flex justify-center flex-col items-center mt-15">
+    <StudentLayout>
+      <div className="flex justify-center flex-col items-center mt-15">
       <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl dark:text-white">
         Pending Request's List
       </h1>
@@ -210,6 +212,7 @@ const PendingRequests = () => {
         </div>
       </section>
     </div>
+    </StudentLayout>
   );
 };
 

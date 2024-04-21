@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SessionContextApi } from "../../context/SessionContextProvider";
+import StudentLayout from "./Layout";
 
 const RejectsSessions = () => {
   const { rejectedSessions,fetchRejectedSessions,loading,error,formatDate } = SessionContextApi();
@@ -7,7 +8,8 @@ const RejectsSessions = () => {
     fetchRejectedSessions();
   }, []);
   return (
-    <div>
+    <StudentLayout>
+      <div>
       <div className="flex justify-center items-center flex-col mt-20">
         <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl dark:text-white">
           Rejected Session's List
@@ -177,6 +179,7 @@ const RejectsSessions = () => {
         </section>
       </div>
     </div>
+    </StudentLayout>
   );
 };
 

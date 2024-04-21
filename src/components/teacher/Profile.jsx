@@ -3,6 +3,8 @@ import TeacherLayout from "./Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, setUserDetails } from "../../redux/auth/authSlice";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
+import ClearIcon from "@mui/icons-material/Clear";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const TeacherProfile = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);
@@ -10,6 +12,9 @@ const TeacherProfile = () => {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const [formDisable, setFormDisable] = useState(true);
+  const [profileImage, setProfileImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(currentUser.profilePic);
+  const fileInputRef = useRef(null);
   const formDisableHandler = () => {
     setFormDisable((val) => !val);
   };
@@ -34,13 +39,18 @@ const TeacherProfile = () => {
     console.log(formData);
     try {
       setLoading(true);
+      const newData = new FormData();
+      newData.append("formData",JSON.stringify(formData));
+      newData.append("file",profileImage);
+      for (let [key, value] of newData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
       const response = await fetch("https://knowledgehub-backend.onrender.com/api/v1/teacher/updateProfile", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${currentUser.token}`,
         },
-        body: JSON.stringify(formData),
+        body: newData,
       });
       const data = await response.json();
       setLoading(false);
@@ -49,6 +59,7 @@ const TeacherProfile = () => {
         setFormDisable(true);
       } else {
         setError(data.message);
+        console.log(data.message);
       }
       dispatch(loginSuccess({ currentUser: { ...currentUser, ...data.updatedTeacher } }));
     } catch (error) {
@@ -58,34 +69,65 @@ const TeacherProfile = () => {
     }
   };
 
+  const handleProfilePicChange = (e) => {
+    const file = e.target.files[0];
+    setProfileImage(file);
+    if (!file) return;
+    else {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   return (
     <TeacherLayout>
       <div className="mt-14 lg:ml-14 mx-auto">
-        <div className="lg:w-5/6 w-5/6 mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-          <button
-            className={`text-white flex justify-center gap-3 items-center  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${!formDisable ? "bg-gray-600": "bg-blue-700 hover:bg-blue-800"}`}
-            onClick={formDisableHandler}
-          >
-            <div>
-              Edit Profile
+        <div className="lg:w-5/6 w-5/6 mx-auto p-6 bg-gray-100 rounded-lg shadow-md flex justify-center relative">
+        <div className="absolute right-4 ">
+            <button
+              className={`text-white flex justify-center gap-3 items-center  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${
+                !formDisable ? "bg-gray-600" : "bg-blue-700 hover:bg-blue-800"
+              }`}
+              onClick={formDisableHandler}
+            >
+              <div>{formDisable ? "Edit Profile" : "Cancel"}</div>
+              <div>{formDisable ? <BorderColorIcon /> : <ClearIcon />}</div>
+            </button>
+          </div>
+          <div className="flex mt-10 mx-auto flex-col justify-center items-center w-full h-full">
+          <div className="w-full">
+              <div className="mt-20 md:mx-auto gap-10 flex flex-col items-center justify-center">
+                <img
+                  src={
+                    selectedImage ||
+                    "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-social-media-user-vector-default-avatar-profile-icon-social-media-user-vector-portrait-176194876.jpg"
+                  }
+                  className="lg:h-64 lg:w-64 h-56 w-56 object-cover rounded-full border-[#63d3a6] border-8"
+                  alt=""
+                />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".png, .jpg, .jpeg"
+                  onChange={handleProfilePicChange}
+                  style={{ display: "none" }}
+                />
+                <button
+                  type="button"
+                  className={`text-white bg-[#3797eb] hover:bg-gray-900 font-medium text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 -mt-5 ml-4 dark:border-gray-700 ${
+                    formDisable ? "hidden" : ""
+                  }`}
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  Change Profile Pic
+                </button>
+              </div>
             </div>
-            <div>
-              <BorderColorIcon/>
-            </div>
-          </button>
-          <div className="flex gap-24 md:flex-row flex-col justify-center items-center sm:items-start ">
-            <div className="mt-4 w-1/2">
-              {currentUser.profilePic && (
-                <div className="flex justify-end">
-                  <img
-                    src={currentUser.profilePic}
-                    alt="Profile"
-                    className="lg:w-64 lg:h-64 w-36 h-36 rounded-full"
-                  />
-                </div>
-              )}
-            </div>
-            <form>
+            <div className="lg:w-4/5 w-full my-10 mx-5">
+            <form className="w-full">
               <div className="mb-4">
                 <label className="block text-gray-700 font-bold mb-2">
                   Name:
@@ -161,33 +203,25 @@ const TeacherProfile = () => {
                   value={formData.experience}
                   disabled={formDisable}
                   onChange={handleChange}
-                  className={`m-1 p-1  bg-white flex-auto focus:outline-0 w-full px-3 py-2 border border-gray-300 rounded-md ${
-                    !formDisable && "border-slate-600 border-b-2"
-                  }`}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">
-                  Profile Picture:
-                </label>
-                <input
-                  type="file"
-                  name="profilePic"
-                  onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
-              <div className="flex flex-col">
-                <button
-                  onClick={handleSubmit}
-                  className=" p-3 rounded-lg hover:opacity-90 font-bold text-white mx-2   bg-blue-500 shadow-lg shadow-blue-500/50 "
-                  disabled={formDisable}
-                >
-                  {loading ? "UPDATING" : "SAVE CHANGES"}
-                </button>
-                {error && <p className="text-red-600 text-center">{error}</p>}
-              </div>
+              <div className="flex flex-col mt-10 w-full">
+                  <button
+                    onClick={handleSubmit}
+                    className={`p-3 rounded-lg hover:opacity-90 font-bold text-white mx-2    ${
+                      formDisable
+                        ? "bg-gray-500 cursor-not-allowed"
+                        : "bg-blue-700 shadow-lg shadow-blue-500/50"
+                    }`}
+                    disabled={formDisable}
+                  >
+                    {loading ? <CircularProgress size={22} style={{"color" : "white"}} thickness={5}/> : "SAVE CHANGES"}
+                  </button>
+                  {error && <p className="text-red-600 text-center">{error}</p>}
+                </div>
             </form>
+            </div>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import Layout from "./Layout";
 import { useSelector } from "react-redux";
 import { SessionContextApi } from "../../context/SessionContextProvider";
+import StudentLayout from "./Layout";
 
 const StudentDashboard = () => {
   const {teachers,loading,error,fetchTeachers} = SessionContextApi();
@@ -11,7 +11,7 @@ const StudentDashboard = () => {
     fetchTeachers(); 
   }, [currentUser]);
   return (
-        <Layout>
+        <StudentLayout>
           {/* <div className="p-4 sm:ml-64"> */}
           <div>
           <div className="flex p-4 justify-center items-center mt-20 flex-col">
@@ -25,7 +25,7 @@ const StudentDashboard = () => {
             </section>
             </div>
           </div>
-        </Layout>
+        </StudentLayout>
   )
 };
 

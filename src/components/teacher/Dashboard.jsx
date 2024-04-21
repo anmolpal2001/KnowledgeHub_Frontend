@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Layout from "./Layout";
 import { SessionContextApi } from "../../context/SessionContextProvider";
+import TeacherLayout from "./Layout";
 
 const TeacherDashboard = () => {
-  const {pendingCount,acceptedCount} = SessionContextApi();
+  const {pendingCount,acceptedCount,fetchBookingRequests,fetchAcceptedSessions} = SessionContextApi();
+
+  useEffect(() => {
+    fetchBookingRequests();
+    fetchAcceptedSessions();
+  }, []);
+
 
   return (
     <>
-      <Layout>
+      <TeacherLayout>
         <div>
           <div className="flex justify-center flex-col items-center mt-15">
             <section className="w-full h-full mx-5 md:mx-10 p-3 sm:p-5">
@@ -41,7 +47,7 @@ const TeacherDashboard = () => {
             </section>
           </div>
         </div>
-      </Layout>
+      </TeacherLayout>
     </>
   );
 };

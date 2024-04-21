@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import StudentCard from "./StudentCard";
 import { SessionContextApi } from "../../context/SessionContextProvider";
+import TeacherLayout from "./Layout";
 
 const ApproveRequest = () => {
   const { bookingRequests, fetchBookingRequests, loading, error } =
@@ -10,7 +11,7 @@ const ApproveRequest = () => {
   }, []);
 
   return (
-    <>
+    <TeacherLayout>
       <div>
         <div className="flex justify-center items-center flex-col mt-20">
           <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl dark:text-white">
@@ -40,7 +41,7 @@ const ApproveRequest = () => {
           </section>
         </div>
       </div>
-    </>
+    </TeacherLayout>
   );
 };
 

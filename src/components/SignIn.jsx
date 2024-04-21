@@ -43,14 +43,14 @@ const SignIn = () => {
           if (data.user.needProfileUpdate) {
             navigate("/profile");
           } else {
-            navigate("/teacher");
+            navigate("/");
           }
         } 
         else {
           if (data.user.needProfileUpdate) {
             navigate("/profile");
           } else {
-            navigate("/student");
+            navigate("/");
           }
         }
       } else {
@@ -105,12 +105,12 @@ const SignIn = () => {
                 Password
               </label>
               <div className="text-sm">
-                <a
-                  href="#"
+                <Link
+                  to="/forgot-password"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
             <div className="mt-2">
